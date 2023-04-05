@@ -146,7 +146,11 @@ namespace MongoExcelMigration.Modelos
                                 break;
 
                             case "C. Pago":
-                                employee.iEm_cpago = int.Parse(dataf.FormatCellValue(row.GetCell(j)));
+                                int cpagoAux;
+                                if (int.TryParse(dataf.FormatCellValue(row.GetCell(j)), out cpagoAux))
+                                    employee.iEm_cpago = cpagoAux;
+                                else
+                                    employee.iEm_cpago = cpagoAux;
                                 break;
 
                             case "Turno":
@@ -755,13 +759,13 @@ namespace MongoExcelMigration.Modelos
                             }
                             break;
                         }
-                    Console.WriteLine("Finalizacion de una columna");
+                    Console.WriteLine("Add camp to: "+employee.ToString());
                     }
-                    Console.WriteLine("Finalizacion de un Registro");
                     employee.aBeneficiarios = benefe;
+                    Console.WriteLine("Finish: " + employee.ToString());
                     BsonDocument document = new BsonDocument();
                     clsMongoConection.SubirDatos(employee);
-                Console.WriteLine("Registro subido");
+                    Console.WriteLine("Upload: " + employee.ToString() + " to DB");
                 }
 
 
