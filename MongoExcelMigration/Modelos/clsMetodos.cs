@@ -18,8 +18,8 @@ namespace MongoExcelMigration.Modelos
     {
         public static void ReadExcel()
         {
-            //try
-            //{
+            try
+            {
                 String filepath = @"D:\cris-\Descargas\R01-Colaboradores.xlsx";
 
                 FileStream fs = new FileStream(filepath, FileMode.Open, FileAccess.Read);
@@ -46,7 +46,7 @@ namespace MongoExcelMigration.Modelos
                     {
                         new mdlEmplea.mdl_Beneficiario()
                     };
-                    for (int j = 0; i < row.Cells.Count; j++)
+                    for (int j = 0; j < row.Cells.Count; j++)
                     {
                         switch (dataf.FormatCellValue(headRow.GetCell(j)))
                         {
@@ -56,7 +56,7 @@ namespace MongoExcelMigration.Modelos
                                 employee.iEm_numero = int.Parse(dataf.FormatCellValue(row.GetCell(j)));//bd
                                 break;
 
-                            case "Nombre":
+                            case "Nombre  ":
                                 if (dataf.FormatCellValue(row.GetCell(j)) != null)
                                 {
                                     employee.sEm_nombre = dataf.FormatCellValue(row.GetCell(j));
@@ -67,7 +67,7 @@ namespace MongoExcelMigration.Modelos
                                 }
                                 break;
 
-                            case "Compañia":
+                            case "Compañía  ":
                                 employee.iEm_cia = int.Parse(dataf.FormatCellValue(row.GetCell(j)));
                                 break;
 
@@ -755,18 +755,21 @@ namespace MongoExcelMigration.Modelos
                             }
                             break;
                         }
+                    Console.WriteLine("Finalizacion de una columna");
                     }
+                    Console.WriteLine("Finalizacion de un Registro");
                     employee.aBeneficiarios = benefe;
                     BsonDocument document = new BsonDocument();
                     clsMongoConection.SubirDatos(employee);
+                Console.WriteLine("Registro subido");
                 }
 
 
-            //}
-            /*catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-            }*/
+            }
         }
     }
 }
