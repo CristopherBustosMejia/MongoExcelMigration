@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -762,6 +763,28 @@ namespace MongoExcelMigration.Modelos
                     Console.WriteLine("Add camp to: "+employee.ToString());
                     }
                     employee.aBeneficiarios = benefe;
+                    PropertyInfo[] properties = typeof(mdlEmplea.mdl_Emplea).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    foreach (PropertyInfo property in properties)
+                    {
+                        if (property.GetValue(employee) == null )
+                        {
+                            switch (property.PropertyType)
+                            {
+                                case Type t when t == typeof(string):
+                                    property.SetValue(employee, string.Empty);
+                                    break;
+                                case Type t when t == typeof(int):
+                                    property.SetValue(employee, 0);
+                                    break;
+                                case Type t when t == typeof(double):
+                                    property.SetValue(employee, 0.0);
+                                    break;
+                                case Type t when t == typeof(DateTime):
+                                    property.SetValue(employee, new DateTime(1900, 1, 1, 0, 0, 0));
+                                    break;
+                            }
+                        }
+                    }
                     Console.WriteLine("Finish: " + employee.ToString());
                     BsonDocument document = new BsonDocument();
                     clsMongoConection.SubirDatos(employee);
