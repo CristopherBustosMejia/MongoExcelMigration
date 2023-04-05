@@ -12,7 +12,7 @@ namespace MongoExcelMigration.Modelos
 {
     public static class clsMongoConection
     {
-        public static void SubirDatos(String sDBNombre,BsonDocument oDocumento)
+        public static void SubirDatos(String sDBNombre,mdlEmplea.mdl_Emplea oDocumento)
         {
             try
             {
@@ -20,7 +20,7 @@ namespace MongoExcelMigration.Modelos
 
                 var oDatabase = oClient.GetDatabase(sDBNombre);
 
-                var coleccion = oDatabase.GetCollection<BsonDocument>("datos");
+                var coleccion = oDatabase.GetCollection<mdlEmplea.mdl_Emplea>("datos");
                 coleccion.InsertOne(oDocumento);
             }
             catch (Exception ex)
