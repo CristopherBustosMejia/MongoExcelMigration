@@ -766,7 +766,7 @@ namespace MongoExcelMigration.Modelos
                     PropertyInfo[] properties = typeof(mdlEmplea.mdl_Emplea).GetProperties(BindingFlags.Public | BindingFlags.Instance);
                     foreach (PropertyInfo property in properties)
                     {
-                        if (property.GetValue(employee) == null )
+                        if (property.GetValue(employee) == null)
                         {
                             switch (property.PropertyType)
                             {
@@ -779,8 +779,50 @@ namespace MongoExcelMigration.Modelos
                                 case Type t when t == typeof(double):
                                     property.SetValue(employee, 0.0);
                                     break;
+                                case Type t when t == typeof(long):
+                                    property.SetValue(employee, 0);
+                                    break;
                                 case Type t when t == typeof(DateTime):
-                                    property.SetValue(employee, new DateTime(1900, 1, 1, 0, 0, 0));
+                                    property.SetValue(employee, DateTime.ParseExact("01/01/1900", "MM/dd/yyyy", CultureInfo.InvariantCulture));
+                                    break;
+                            }
+                        }
+                        if(property.PropertyType == typeof(DateTime))
+                        {
+                            if ((DateTime)property.GetValue(employee) == DateTime.MinValue)
+                            {
+                                property.SetValue(employee, DateTime.ParseExact("01/01/1900", "MM/dd/yyyy", CultureInfo.InvariantCulture));
+                            }
+                        }
+                    }
+                    mdlEmplea.mdl_Conceptos[] concept = new mdlEmplea.mdl_Conceptos[]
+                                    {
+                                        new mdlEmplea.mdl_Conceptos()
+                                        {
+                                            iPd_periodo = 0,
+                                        }
+                                    };
+                    PropertyInfo[] propertieA = typeof(mdlEmplea.mdl_Conceptos).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    foreach(PropertyInfo property in propertieA)
+                    {
+                        if (property.GetValue(concept[0]) == null) 
+                        {
+                            switch (property.PropertyType)
+                            {
+                                case Type t when t == typeof(string):
+                                    property.SetValue(concept[0], string.Empty);
+                                    break;
+                                case Type t when t == typeof(int):
+                                    property.SetValue(concept[0], 0);
+                                    break;
+                                case Type t when t == typeof(double):
+                                    property.SetValue(concept[0], 0.0);
+                                    break;
+                                case Type t when t == typeof (long):
+                                    property.SetValue(concept[0], 0);
+                                    break;
+                                case Type t when t == typeof(DateTime):
+                                    property.SetValue(employee, DateTime.ParseExact("01/01/1900", "MM/dd/yyyy", CultureInfo.InvariantCulture));
                                     break;
                             }
                         }
